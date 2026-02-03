@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will You Be My Valentine? ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      color: #fff;
+      text-align: center;
+      overflow: hidden;
+    }
+    .screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.2rem;
+      max-width: 500px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 30px;
+      background: #ff2f68;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      font-size: 2rem;
+      cursor: pointer;
+      animation: float 3s linear forwards;
+    }
+    @keyframes float {
+      from { bottom: -50px; opacity: 1; }
+      to { bottom: 100%; opacity: 0; }
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Screen 1 -->
+  <div id="intro" class="screen">
+    <h1>Hey ❤️</h1>
+    <p>I made a tiny game just for you. Win it, and I have a question to ask 👀</p>
+    <button onclick="startGame()">Start the Game</button>
+  </div>
+
+  <!-- Screen 2: Game -->
+  <div id="game" class="screen hidden">
+    <h1>Catch the Hearts 💕</h1>
+    <p>Tap 5 hearts to unlock the question!</p>
+    <p><strong>Score: <span id="score">0</span>/5</strong></p>
+    <div id="gameArea"></div>
+  </div>
+
+  <!-- Screen 3: Question -->
+  <div id="question" class="screen hidden">
+    <h1>So… 💖</h1>
+    <p>Will you be my Valentine? 🌹</p>
+    <button onclick="yesAnswer()">YES 😍</button>
+    <button onclick="noAnswer()">NO 🙄</button>
+  </div>
+
+  <!-- Screen 4: Result -->
+  <div id="result" class="screen hidden">
+    <h1 id="resultText"></h1>
+    <p>You just made my day ❤️</p>
+  </div>
+
+  <script>
+    let score = 0;
+    let gameInterval;
+
+    function startGame() {
+      document.getElementById('intro').classList.add('hidden');
+      document.getElementById('game').classList.remove('hidden');
+      gameInterval = setInterval(spawnHeart, 700);
+    }
+
+    function spawnHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerText = '❤️';
+      heart.style.left = Math.random() * 90 + '%';
+      document.getElementById('gameArea').appendChild(heart);
+
+      heart.onclick = () => {
+        score++;
+        document.getElementById('score').innerText = score;
+        heart.remove();
+        if (score >= 5) endGame();
+      };
+
+      setTimeout(() => heart.remove(), 3000);
+    }
+
+    function endGame() {
+      clearInterval(gameInterval);
+      document.getElementById('game').classList.add('hidden');
+      document.getElementById('question').classList.remove('hidden');
+    }
+
+    function yesAnswer() {
+      document.getElementById('question').classList.add('hidden');
+      document.getElementById('result').classList.remove('hidden');
+      document.getElementById('resultText').innerText = 'YAY!! 💘🥰';
+    }
+
+    function noAnswer() {
+      alert('Wrong answer 😌 Try again');
+    }
+  </script>
+</body>
+</html>
